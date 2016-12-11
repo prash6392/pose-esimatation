@@ -1,0 +1,62 @@
+- Rigid transformation of the face
+- Estimate 3D motion vector
+- Drop z motion vector
+- convert sparse to dense flow
+- warp image
+
+Presentation:
+- Camera estimation algorithm
+    - plot of 3D correspondences
+    - plot of 2D correspondences on face
+    - 3D plot of estimated camera with 3D landmarks (add 3D vector for camera axis)
+    - Re-projection error for various methods (ceres solver, PnP, calibrateCamera)
+
+Warping approach 1:
+- Translate camera
+- Reproject landmarks into image plane
+- Estimate flow vectors for landmarks in 2D image plane
+    - Custom method
+        - Weighted average of 'n' nearest candidate points
+        - Smoothen flow field with gaussian
+        - Show flow field on 2D (intensity image + quiver)
+    - Inpainting
+        - show flow field on 2D (intensity image + quiver)
+    - Interpolation/Extrapolation
+        - show flow field on 2D (intensity image + quiver)
+    - Diffusion
+        - Laplacian + Neumann boundary condition
+- Warp image from dense flow field
+    - Post process
+        - Smoothen
+        - Inpaint
+    - Show few results
+
+
+Warping approach 2:
+- Fix camera
+- Rigid transformation of the object
+- Estimate flow vector in 3D
+    - If possible show 3D flow field (sparse)
+- Estimate flow vector in 2D
+    - drop z flow to obtain 2D flow sparse
+- Estimate dense flow from one of the above method
+    - Compare
+- Warp image from dense flow field
+    - post process
+    - Show same results are for approach 1
+
+Identify areas of improvement:
+    - List out areas
+    - Add a constraint to the optimizer such that camera Z co-ordinate is always positive
+    - Rama Chellapa's deep learning paper on face + pose estimation - inform them
+
+Today's work:
+- diffusion equation
+- rigid transforms
+- warping
+    - knn flow
+    - cubic interpolation
+    - diffusion flow
+- perspective warp
+- inpainting
+- ransac working

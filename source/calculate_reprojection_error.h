@@ -25,8 +25,8 @@ struct SnavelyReprojectionError {
 
     // Compute final projected point position.
     const T& focal = camera[6];
-    T predicted_x = focal * xp;
-    T predicted_y = focal * yp;
+    T predicted_x = (focal * xp)+camera[7];
+    T predicted_y = (focal * yp)+camera[8];
 
     // The error is the difference between the predicted and observed position.
     residuals[0] = predicted_x - T(observed_x);
@@ -38,7 +38,7 @@ struct SnavelyReprojectionError {
    // the client code.
    static ceres::CostFunction* Create(const double observed_x,
                                       const double observed_y) {
-     return (new ceres::AutoDiffCostFunction<SnavelyReprojectionError, 2, 7, 3>(
+     return (new ceres::AutoDiffCostFunction<SnavelyReprojectionError, 2, 9, 3>(
                  new SnavelyReprojectionError(observed_x, observed_y)));
    }
 
