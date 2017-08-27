@@ -19,7 +19,7 @@ int main(int argc, char**argv)
     // setup dummy rigid transform
     RigidTransformation rt;
     Eigen::Vector3d tvec;
-    tvec.setOnes();
+    tvec.setRandom();
     rt.setTranslation(tvec);
     std::cout << "Rigid Transformation:\n" << rt << std::endl;
 
@@ -31,7 +31,7 @@ int main(int argc, char**argv)
     // Solve this 3d Alignment problem
     Alignment3DProblem ap(f1, f2);
     ap.setupProblem();
-    ap.solveProblem();
+    ap.solveProblem(true);
     std::cout << "Solution:\n" << "Rotation: " << ap.getRotation().toRotationMatrix() <<
                  "\nTranslation: " << ap.getTranslation() <<
                  "\nScale: " << ap.getScale() << std::endl;

@@ -29,11 +29,14 @@ if (OPENMP_FOUND)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 target_link_libraries(${PROJECT_NAME}
-    ${CERES_LIB_STATIC}
     ${DLIB_LIB_STATIC}
     ${GLOG_LIB}
+    ${CERES_LIB_STATIC}
     pthread
-    ${SUITESPARSE}
-    ${BLAS_LIBS})
+    blas
+    lapack
+    atlas
+    lapack_atlas
+    ${SUITESPARSE})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
