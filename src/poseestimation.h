@@ -54,7 +54,10 @@ namespace clubster {
     public:
         Alignment3DProblem(const Features3D & sf, const Features3D & tf) :
             m_sourceFeatures(sf),
-            m_targetFeatures(tf)
+            m_targetFeatures(tf),
+            m_rotquat(Eigen::Quaterniond::Identity()),
+            m_trans(0, 0, 0),
+            m_scale(1, 1, 1)
         {}
         void setupProblem();
         void solveProblem(const bool debug_mode=false);

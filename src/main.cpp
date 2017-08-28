@@ -1,17 +1,25 @@
 #include "poseestimation.h"
+#include <time.h>
 
 using namespace clubster;
 
 int main(int argc, char**argv)
 {
     char * file_name=NULL;
-    if (argc > 0)
+    if (argc != 2)
+    {
+        throw std::runtime_error("PoseEstimation needs exactly two arguments. "
+                                 "PoseEstimation path_to_feature_file");
+        return -1;
+    }
+    else
     {
         file_name = argv[1];
     }
     if (file_name == NULL)
     {
-        std::runtime_error("Filename cannot be empty.");
+        throw std::runtime_error("Filename cannot be empty.");
+        return -1;
     }
     // read features from file
     Features3D f1(file_name);
@@ -19,6 +27,8 @@ int main(int argc, char**argv)
     // setup dummy rigid transform
     RigidTransformation rt;
     Eigen::Vector3d tvec;
+    // set seed for random number generator.
+    std::srand((unsigned int) time(0));
     tvec.setRandom();
     rt.setTranslation(tvec);
     std::cout << "Rigid Transformation:\n" << rt << std::endl;
