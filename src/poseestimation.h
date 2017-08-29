@@ -22,9 +22,9 @@ namespace clubster {
         const
         {
             Eigen::Map<const Eigen::Quaternion<T>> rq(rot);
-            // set source point
+            // source point
             auto sp = m_source_pt.getPointAsVec();
-            // set target point
+            // target point
             auto tp = m_target_pt.getPointAsVec();
 
             // rotate and translate point
@@ -32,11 +32,11 @@ namespace clubster {
             temp[0] += trans[0];
             temp[1] += trans[1];
             temp[2] += trans[2];
-            // scale point accordingly
+            // scale point
             temp[0] *= scale[0];
             temp[1] *= scale[1];
             temp[2] *= scale[2];
-
+            // compute residual or error
             residuals[0] = tp.cast<T>()[0]-temp[0];
             residuals[1] = tp.cast<T>()[1]-temp[1];
             residuals[2] = tp.cast<T>()[2]-temp[2];

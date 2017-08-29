@@ -6,6 +6,7 @@ using namespace clubster;
 int main(int argc, char**argv)
 {
     char * file_name=NULL;
+    // Check arguments.
     if (argc != 2)
     {
         throw std::runtime_error("PoseEstimation needs exactly two arguments. "
@@ -21,28 +22,35 @@ int main(int argc, char**argv)
         throw std::runtime_error("Filename cannot be empty.");
         return -1;
     }
-    // read features from file
-    Features3D f1(file_name);
-    // std::cout << "original feature set:\n" << f1 << std::endl;
-    // setup dummy rigid transform
-    RigidTransformation rt;
-    Eigen::Vector3d tvec;
     // set seed for random number generator.
     std::srand((unsigned int) time(0));
+
+    // read features from file
+    Features3D f1(file_name);
+    // Initialize a random Rigid transform
+    RigidTransformation rigid_transform;
+    // translation for the rigid transform
+    Eigen::Vector3d tvec;
+    // scale for the rigid transform
+    Eigen::Vector3d scale;
     tvec.setRandom();
-    rt.setTranslation(tvec);
-    std::cout << "Rigid Transformation:\n" << rt << std::endl;
+    scale.setRandom();
+    rigid_transform.setTranslation(tvec);
+    rigid_transform.setScale(scale);
+    std::cout << "Rigid Transformation:\n" << rigid_transform << std::endl;
 
+    // Create a new feature set
     Features3D f2(f1);
-    // transform all points in this feature set
-    f2.transformFeatureSet(rt);
-    // std::cout << "transformed feature set: " << f2 << std::endl;
+    // transform all points in this new feature set f2.
+    f2.transformFeatureSet(rigid_transform);
 
-    // Solve this 3d Alignment problem
+    // Solve the 3d Alignment problem - Finds the unknown rotation, translation and scale.
     Alignment3DProblem ap(f1, f2);
     ap.setupProblem();
+    // Solve problem with debug prints enabled.
     ap.solveProblem(true);
-    std::cout << "Solution:\n" << "Rotation: " << ap.getRotation().toRotationMatrix() <<
-                 "\nTranslation: " << ap.getTranslation() <<
-                 "\nScale: " << ap.getScale() << std::endl;
+    // Print out the estimated solution.
+    std::cout << "Solution:\n" << "Rotation:\n" << ap.getRotation().toRotationMatrix() <<
+                 "\nTranslation:\n" << ap.getTranslation() <<
+                 "\nScale:\n" << ap.getScale() << std::endl;
 }

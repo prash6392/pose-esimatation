@@ -11,11 +11,11 @@ Features3D::Features3D(const char *filename)
     if (filename == NULL)
         throw std::runtime_error("File pointer is NULL");
 
+    // parser for meshlab picked points file.
     pugi::xml_document doc;
     if (doc.load_file(filename))
     {
         pugi::xml_node picked_points = doc.child("PickedPoints");
-        // parse file
         for (pugi::xml_node point = picked_points.child("point"); point; point=point.next_sibling("point"))
         {
             float x = point.attribute("x").as_float();
